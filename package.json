@@ -7,8 +7,8 @@
     "pm2"     : "2.0.7"
   },
   "scripts": {
-    "start": "node ./node_modules/.bin/pm2 start app.js --name pm2-ebs-demo",
-    "poststart": "node ./node_modules/.bin/pm2 logs"
+    "start": "node ./node_modules/pm2/bin/pm2 start app.js --name pm2-ebs-demo",
+    "poststart": "node ./node_modules/pm2/bin/pm2 logs"
   },
   "author": "",
   "license": "MIT"
