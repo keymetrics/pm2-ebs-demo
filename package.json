@@ -1,20 +1,28 @@
 {
-  "name": "pm2-ebs-demo",
-  "version": "1.0.0",
+  "name": "postgraphql-beanstalk",
+  "version": "0.0.1",
   "description": "",
   "dependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-register": "^6.23.0",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
     "express": "^4.14.1",
     "helmet": "^3.4.1",
+    "hpp": "^0.2.1",
     "morgan": "^1.8.1",
-    "pm2": "^2.4.0",
-    "postgraphql": "^3.0.1"
+    "postgraphql": "^3.0.1",
+    "throng": "^4.0.0"
   },
   "scripts": {
-    "start": "node ./node_modules/.bin/pm2 start app.js --name pm2-ebs-demo",
-    "poststart": "node ./node_modules/.bin/pm2 logs"
+    "dev": "NODE_ENV=development node -r \"babel-register\" ./app.js",
+    "prestart": "NODE_ENV=production babel ./app.js --out-file ./app.builded.js",
+    "start": "NODE_ENV=production node ./app.builded.js"
   },
-  "author": "",
-  "license": "MIT"
+  "author": "Lucas Pirola<lucaspirola@gmail.com>",
+  "repository": "git@github.com:lpirola/postgraphql-beanstalk.git",
+  "license": "GPL-3.0"
 }
