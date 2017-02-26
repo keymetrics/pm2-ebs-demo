@@ -5,7 +5,8 @@ dotenv.config()
 import http from 'http'
 import express from 'express'
 import postgraphql from 'postgraphql'
-import morgan from 'morgan'
+import winston from 'winston'
+import expressWinston from 'express-winston'
 import cors from 'cors'
 import compression from 'compression'
 import helmet from 'helmet'
@@ -24,7 +25,6 @@ const DefaultServerConfig = {
 
 export const createServer = (config) => {
   const __PROD__ = config.nodeEnv === 'production'
-  const __TEST__ = config.nodeEnv === 'test'
   const optionsPostgraph = (__PROD__ ? {} : { graphiql: true })
   const app = express()
 
@@ -34,12 +34,25 @@ export const createServer = (config) => {
   }
 
   app.disable('x-powered-by')
-  app.use(morgan((__PROD__ || __TEST__) ? 'combined' : 'dev'))
+  app.use(expressWinston.logger({
+    transports: [
+      new winston.transports.Console({ colorize: true })
+    ],
+    msg: 'HTTP {{req.method}} {{req.url}}',
+    expressFormat: true,
+    colorize: true
+  }))
   app.use(cors())
   app.use(helmet())
   app.use(hpp())
   app.use(compression())
   app.use(postgraphql(config.databaseUrl, config.schemaName, optionsPostgraph))
+
+  app.use(expressWinston.errorLogger({
+    transports: [
+      new winston.transports.Console({ colorize: true })
+    ]
+  }))
 
   if (__PROD__) { app.use(Raven.errorHandler()) }
 
@@ -72,8 +85,8 @@ const startServer = (serverConfig) => {
 
   const server = createServer(config)
   server.listen(config.port, (err) => {
-    if (err) console.log(err)
-    console.log(`server ${config.id} listening on port ${config.port}`)
+    if (err) winston.log(err)
+    winston.info(`server ${config.id} listening on port ${config.port}`)
   })
 }
 
