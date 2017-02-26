@@ -1,3 +1,4 @@
+import newrelic from 'newrelic'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -10,29 +11,37 @@ import compression from 'compression'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import throng from 'throng'
+import Raven from 'raven'
 
 const DefaultServerConfig = {
   nodeEnv: process.env.NODE_ENV,
   port: process.env.PORT,
   timeout: 60000,
   schemaName: process.env.SCHEMA_NAME,
-  databaseUrl: process.env.DATABASE_URL
+  databaseUrl: process.env.DATABASE_URL,
+  sentryDns: process.env.SENTRY_DSN
 }
 
 export const createServer = (config) => {
   const __PROD__ = config.nodeEnv === 'production'
   const __TEST__ = config.nodeEnv === 'test'
-
+  const optionsPostgraph = (__PROD__ ? {} : { graphiql: true })
   const app = express()
+
+  if (__PROD__) {
+    Raven.config(config.sentryDns).install()
+    app.use(Raven.requestHandler())
+  }
+
   app.disable('x-powered-by')
   app.use(morgan((__PROD__ || __TEST__) ? 'combined' : 'dev'))
   app.use(cors())
   app.use(helmet())
   app.use(hpp())
   app.use(compression())
-
-  const optionsPostgraph = (__PROD__ ? {} : { graphiql: true })
   app.use(postgraphql(config.databaseUrl, config.schemaName, optionsPostgraph))
+
+  if (__PROD__) { app.use(Raven.errorHandler()) }
 
   const server = http.createServer(app)
 

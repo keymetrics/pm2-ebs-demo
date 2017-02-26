@@ -10,18 +10,19 @@
     "helmet": "^3.4.1",
     "hpp": "^0.2.1",
     "morgan": "^1.8.1",
+    "newrelic": "^1.37.2",
     "postgraphql": "^3.0.1",
-    "throng": "^4.0.0"
-  },
-  "devDependencies": {
+    "raven": "^1.1.2",
+    "throng": "^4.0.0",
     "babel-cli": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
     "babel-register": "^6.23.0"
   },
   "scripts": {
-    "dev": "NODE_ENV=development node -r \"babel-register\" ./app.js",
-    "prestart": "NODE_ENV=production babel ./app.js --out-file ./app.builded.js",
-    "start": "NODE_ENV=production node ./app.builded.js"
+    "dev": "NODE_ENV=development NEW_RELIC_ENABLED=false node -r \"babel-register\" ./index.js",
+    "prestart": "NODE_ENV=production babel ./index.js --out-file ./index.builded.js",
+    "start": "NODE_ENV=production node ./index.builded.js"
   },
   "author": "Lucas Pirola<lucaspirola@gmail.com>",
   "repository": "git@github.com:lpirola/postgraphql-beanstalk.git",

@@ -1,4 +1,4 @@
-app.builded.js
+*.builded.js
 .env
 /node_modules
 *.log
