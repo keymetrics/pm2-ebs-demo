@@ -1,6 +1,9 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import http from 'http'
 import express from 'express'
-import postgraphql from 'postgraphql' // .postgraphql
+import postgraphql from 'postgraphql'
 import morgan from 'morgan'
 import cors from 'cors'
 import compression from 'compression'
@@ -10,10 +13,10 @@ import throng from 'throng'
 
 const DefaultServerConfig = {
   nodeEnv: process.env.NODE_ENV,
-  port: process.env.PORT || 1337,
+  port: process.env.PORT,
   timeout: 60000,
-  schemaName: process.env.SCHEMA_NAME || 'public',
-  databaseUrl: process.env.DATABASE_URL || 'postgres://localhost:5432'
+  schemaName: process.env.SCHEMA_NAME,
+  databaseUrl: process.env.DATABASE_URL
 }
 
 export const createServer = (config) => {
