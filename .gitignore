@@ -1,4 +1,3 @@
-*.builded.js
 /node_modules
 *.log
 *.log
