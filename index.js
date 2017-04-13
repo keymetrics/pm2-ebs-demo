@@ -17,7 +17,7 @@ import Raven from 'raven'
 const DefaultServerConfig = {
   nodeEnv: process.env.NODE_ENV,
   port: process.env.PORT,
-  timeout: 60000,
+  timeout: 28000,
   schemaName: process.env.SCHEMA_NAME,
   databaseUrl: process.env.DATABASE_URL,
   sentryDns: process.env.SENTRY_DSN
@@ -33,7 +33,6 @@ export const createServer = (config) => {
     app.use(Raven.requestHandler())
   }
 
-  app.disable('x-powered-by')
   app.use(expressWinston.logger({
     transports: [
       new winston.transports.Console({ colorize: true })

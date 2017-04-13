@@ -14,7 +14,6 @@
     "express-winston": "^2.2.0",
     "helmet": "^3.4.1",
     "hpp": "^0.2.1",
-    "morgan": "^1.8.1",
     "newrelic": "^1.37.2",
     "postgraphql": "^3.0.1",
     "raven": "^1.1.2",
