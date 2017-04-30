@@ -11,11 +11,11 @@
     "cors": "^2.8.1",
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
-    "express-winston": "^2.2.0",
+    "express-winston": "^2.4.0",
     "helmet": "^3.4.1",
     "hpp": "^0.2.1",
     "newrelic": "^1.37.2",
-    "postgraphql": "^3.0.1",
+    "postgraphql": "^3.2.0",
     "raven": "^1.1.2",
     "throng": "^4.0.0",
     "winston": "^2.3.1"
