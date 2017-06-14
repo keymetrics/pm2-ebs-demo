@@ -1,0 +1,71 @@
+pipeline:
+  build:
+    image: kkarczmarczyk/node-yarn
+    commands:
+      - yarn
+      - yarn test
+    when:
+      event: [push, tag]
+
+  publish-staging:
+    image: plugins/docker
+    repo: nossas/bonde-graphql
+    username: lpirola
+    password: ${DOCKER_PASSWORD}
+    tags:
+      - ${DRONE_BRANCH}
+    build_args:
+      - NODE_ENV=production
+    when:
+      status: success
+      branch: [hotfix-*, release-*, feature-*, develop]
+
+  deploy-staging:
+    image: appleboy/drone-ssh
+    host: staging.bonde.org
+    username: ubuntu
+    command_timeout: 120
+    port: 22
+    script:
+      - sudo docker pull nossas/bonde-graphql:${DRONE_BRANCH}
+      - sudo docker tag nossas/bonde-graphql:${DRONE_BRANCH} dokku/data:latest
+      - dokku tags:deploy data latest
+    when:
+      status: success
+      branch: [hotfix-*, release-*, feature-*, develop]
+
+  publish-production:
+    image: plugins/docker
+    repo: nossas/bonde-graphql
+    username: lpirola
+    password: ${DOCKER_PASSWORD}
+    tags:
+      - ${DRONE_TAG##v}
+    build_args:
+      - NODE_ENV=production
+    when:
+      status: success
+      event: tag
+
+  deploy-production:
+    image: appleboy/drone-ssh
+    host: bonde.org
+    username: ubuntu
+    command_timeout: 120
+    port: 22
+    script:
+      - sudo docker pull nossas/bonde-graphql:${DRONE_TAG##v}
+      - sudo docker tag nossas/bonde-graphql:${DRONE_TAG##v} dokku/data:latest
+      - dokku tags:deploy data latest
+    when:
+      status: success
+      event: tag
+
+  notify:
+    image: plugins/slack
+    webhook: https://hooks.slack.com/services/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
+    channel: n_tech
+    username: CI - ${DRONE_REPO_NAME}
+    when:
+      event: [ push, tag, build, publish, deployment, pull_request ]
+      status: [ success, failure ]

@@ -1,3 +1,5 @@
+*.builded.js
+.env
 /node_modules
 *.log
 *.log
