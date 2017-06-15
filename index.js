@@ -26,12 +26,16 @@ const DefaultServerConfig = {
 
 export const createServer = (config) => {
   const __PROD__ = config.nodeEnv === 'production'
-  const optionsPostgraph = (__PROD__ ? {} : {
-    graphiql: true,
+  
+  const optionsPostgraph = {
     jwtSecret: process.env.JWT_SECRET,
     jwtPgTypeIdentifier: process.env.JWT_TYPE,
-    pgDefaultRole: process.env.PG_DEFAULT_ROLE 
-  })
+    pgDefaultRole: process.env.PG_DEFAULT_ROLE
+  }
+  if (!__PROD__) {
+    optionsPostgraph.graphiql = true
+  }
+  
   const app = express()
 
   if (__PROD__) {
