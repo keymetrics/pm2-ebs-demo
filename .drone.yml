@@ -49,7 +49,7 @@ pipeline:
 
   deploy-production:
     image: appleboy/drone-ssh
-    host: bonde.org
+    host: ssh.bonde.org
     username: ubuntu
     command_timeout: 120
     port: 22
