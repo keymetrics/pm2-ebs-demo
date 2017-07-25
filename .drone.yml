@@ -1,26 +1,22 @@
 pipeline:
-  build:
-    image: kkarczmarczyk/node-yarn
+  tests:
+    image: node
     commands:
       - yarn
       - yarn test
     when:
       event: [push, tag]
 
-  publish-staging:
+  docker-staging:
     image: plugins/docker
     repo: nossas/bonde-graphql
-    username: lpirola
-    password: ${DOCKER_PASSWORD}
     tags:
       - ${DRONE_BRANCH}
-    build_args:
-      - NODE_ENV=production
     when:
       status: success
       branch: [hotfix-*, release-*, feature-*, develop]
 
-  deploy-staging:
+  publish-staging:
     image: appleboy/drone-ssh
     host: staging.bonde.org
     username: ubuntu
@@ -34,15 +30,11 @@ pipeline:
       status: success
       branch: [hotfix-*, release-*, feature-*, develop]
 
-  publish-production:
+  docker-production:
     image: plugins/docker
     repo: nossas/bonde-graphql
-    username: lpirola
-    password: ${DOCKER_PASSWORD}
     tags:
       - ${DRONE_TAG##v}
-    build_args:
-      - NODE_ENV=production
     when:
       status: success
       event: tag
