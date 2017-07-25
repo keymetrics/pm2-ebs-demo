@@ -10,6 +10,7 @@ pipeline:
   docker-staging:
     image: plugins/docker
     repo: nossas/bonde-graphql
+    secrets: [ docker_username, docker_password ]
     tags:
       - ${DRONE_BRANCH}
     when:
@@ -20,6 +21,7 @@ pipeline:
     image: appleboy/drone-ssh
     host: staging.bonde.org
     username: ubuntu
+    secrets: [ ssh_key ]
     command_timeout: 120
     port: 22
     script:
@@ -33,6 +35,7 @@ pipeline:
   docker-production:
     image: plugins/docker
     repo: nossas/bonde-graphql
+    secrets: [ docker_username, docker_password ]
     tags:
       - ${DRONE_TAG##v}
     when:
@@ -43,6 +46,7 @@ pipeline:
     image: appleboy/drone-ssh
     host: ssh.bonde.org
     username: ubuntu
+    secrets: [ ssh_key ]
     command_timeout: 120
     port: 22
     script:
