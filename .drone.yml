@@ -24,6 +24,7 @@ pipeline:
     secrets: [ ssh_key ]
     command_timeout: 120
     port: 22
+    secrets: [ ssh_key ]
     script:
       - sudo docker pull nossas/bonde-graphql:${DRONE_BRANCH}
       - sudo docker tag nossas/bonde-graphql:${DRONE_BRANCH} dokku/data:latest
@@ -49,6 +50,7 @@ pipeline:
     secrets: [ ssh_key ]
     command_timeout: 120
     port: 22
+    secrets: [ ssh_key ]
     script:
       - sudo docker pull nossas/bonde-graphql:${DRONE_TAG##v}
       - sudo docker tag nossas/bonde-graphql:${DRONE_TAG##v} dokku/data:latest
