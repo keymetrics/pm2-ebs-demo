@@ -17,18 +17,14 @@ pipeline:
       status: success
       branch: [hotfix-*, release-*, feature-*, develop]
 
-  publish-staging:
-    image: appleboy/drone-ssh
-    host: staging.bonde.org
-    username: ubuntu
-    secrets: [ ssh_key ]
-    command_timeout: 120
-    port: 22
-    secrets: [ ssh_key ]
-    script:
-      - sudo docker pull nossas/bonde-graphql:${DRONE_BRANCH}
-      - sudo docker tag nossas/bonde-graphql:${DRONE_BRANCH} dokku/data:latest
-      - dokku tags:deploy data latest
+  deploy-rancher-staging:
+    image: peloton/drone-rancher
+    url: http://cluster.bonde.org
+    service: staging/api-v2
+    docker_image: nossas/bonde-graphql:${DRONE_BRANCH}
+    timeout: 360
+    confirm: true
+    secrets: [ rancher_access_key, rancher_secret_key ]
     when:
       status: success
       branch: [hotfix-*, release-*, feature-*, develop]
