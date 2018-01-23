@@ -1,15 +1,32 @@
 {
-  "name": "pm2-ebs-demo",
-  "version": "1.0.0",
+  "name": "postgraphql-production",
+  "version": "0.0.4",
   "description": "",
-  "dependencies" : {
-    "express" : "4.14.0",
-    "pm2"     : "2.0.7"
+  "dependencies": {
+    "ava": "^0.24",
+    "babel-cli": "^6.26",
+    "babel-preset-env": "^1.6",
+    "babel-preset-stage-0": "^6.22",
+    "babel-register": "^6.26",
+    "compression": "^1.7",
+    "cors": "^2.8",
+    "dotenv": "^4.0",
+    "express": "^4.16",
+    "express-winston": "^2.4",
+    "helmet": "^3.10",
+    "hpp": "^0.2",
+    "postgraphql": "^3.5",
+    "raven": "^2.3",
+    "throng": "^4.0",
+    "winston": "^2.4"
   },
   "scripts": {
-    "start": "node ./node_modules/.bin/pm2 start app.js --name pm2-ebs-demo",
-    "poststart": "node ./node_modules/.bin/pm2 logs"
+    "test": "ava",
+    "dev": "NODE_ENV=development NEW_RELIC_ENABLED=false node -r \"babel-register\" ./index.js",
+    "prestart": "NODE_ENV=production babel ./index.js --out-file ./index.builded.js",
+    "start": "NODE_ENV=production node ./index.builded.js"
   },
-  "author": "",
-  "license": "MIT"
+  "author": "Lucas Pirola<lucaspirola@gmail.com>",
+  "repository": "git@github.com:lpirola/postgraphql-production.git",
+  "license": "GPL-3.0"
 }
