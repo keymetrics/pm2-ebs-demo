@@ -1,4 +1,3 @@
-import newrelic from 'newrelic'
 import dotenv from 'dotenv'
 import http from 'http'
 import express from 'express'
